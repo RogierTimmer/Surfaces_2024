@@ -20,10 +20,20 @@ r = linspace(0, 2*a, n);  % Radial positions
 %% Pressure distribution for numerical solution
 p = zeros(1, n);  % Initialize pressure vector
 
+<<<<<<< HEAD
+=======
+% Maximum pressure at the center
+% p_max = 3 * P / (2 * pi * a^2);  % Hertzian max pressure
+
+>>>>>>> 4ba0138157f9ffc988fddd91570de08373d53e9e
 % Loop over each ring to compute pressure
 for i = 1:n
     if r(i) <= a
         % Hertzian pressure distribution for r <= a
+<<<<<<< HEAD
+=======
+        %p(i) = p_max * (1 - (r(i)^2 / a^2));
+>>>>>>> 4ba0138157f9ffc988fddd91570de08373d53e9e
         p(i)= (2*El)/(pi*R)*sqrt(a^2 - r(i)^2);
     else
         % Pressure outside contact area is zero
@@ -71,6 +81,7 @@ title('Pressure distribution');
 grid on;
 
 %% Assignment 2.4
+<<<<<<< HEAD
 % MATLAB code for comparing analytical and numerical deformation due to JKR pressure profile
 
 % Parameters
@@ -191,3 +202,39 @@ figure(5);
 legend('Location', 'southwest');
 hold off;
 
+=======
+%analytical deformation outside of contact area according to eq 2.8
+b = a - r;
+w = zeros(1, n);
+for i = 1:n
+    if b(i) == 0
+        w(i) = ((2*(a^2) - r(i)^2) / (2 * R));
+    elseif r(i) > a
+        w(i) = (2 * a / (pi * R)) * sqrt(a^2 - b(i)^2) * asin(a / r(i)) * (-1 / (pi * R)) * ((r(i)^2 - b(i)^2) * asin(sqrt(a^2 - b(i)^2) / sqrt(r(i)^2 - b(i)^2)) - (a^2 - b(i)^2));
+    else 
+        w(i) = 0;
+    end
+end 
+%w = (2 * a / (pi * R)) * sqrt(a^2 - b^2) * asin(a / r) * (-1 / (pi * R)) * ((r^2 - b^2) * asin(sqrt(a^2 - b^2) / sqrt(r^2 - b^2)) - (a^2 - b^2));
+
+
+%% Pressure distribution for numerical solution
+p4 = zeros(1, n);  % Initialize pressure vector
+fun = @(x, b, r) (2 * x^2 - b^2) / (sqrt(x^2 - b^2) * sqrt(x^2 - r^2));
+
+% Loop over each ring to compute pressure
+for i = 1:n
+    if r(i) <= b(i)
+        % Pressure distribution for r <= b
+        p4(i) = -El / (pi * R) * integral(@(x) fun(x, b(i), r(i)), b(i), a);
+        
+    elseif b(i) < r(i) && r(i) <= a
+        % Pressure distribution for b < r <= a
+        p4(i) = -El / (pi * R) * integral(@(x) fun(x, b(i), r(i)), r(i), a);
+          
+    else
+        % Pressure outside contact is 0
+        p4(i) = 0;
+    end
+end
+>>>>>>> 4ba0138157f9ffc988fddd91570de08373d53e9e
